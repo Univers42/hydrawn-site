@@ -54,13 +54,13 @@ import { APP_URL } from "../lib/app.ts";
         muted
         loop
         playsinline
-        preload="metadata"
+        preload="none"
         poster="/media/workspace.webp"
         data-inview
         aria-label="Six people build one project board at the same time, each cursor named: a title, a colour-coded flow of connected boxes, sticky notes, a timeline, a playing YouTube video, a photo and a hand-drawn sketch"
       >
-        <source src="/media/workspace.webm" type="video/webm" />
-        <source src="/media/workspace.mp4" type="video/mp4" />
+        <source data-src="/media/workspace.webm" type="video/webm" />
+        <source data-src="/media/workspace.mp4" type="video/mp4" />
       </video>
     </figure>
     <p class="credit">
