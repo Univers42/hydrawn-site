@@ -8,7 +8,7 @@ RUN    := docker run --rm -i $(TTY) --user "$$(id -u):$$(id -g)" -e HOME=/tmp -e
           -e npm_config_store_dir=/app/.pnpm-store -v "$(CURDIR)":/app -w /app
 PORT   ?= 4321
 
-.PHONY: install dev check format build preview up down logs
+.PHONY: install dev check format build preview up down logs public
 install: ## Install dependencies (7-day release hold)
 	$(RUN) $(IMAGE) $(PNPM) install
 dev: ## Hot-reloading dev server on http://localhost:$(PORT)
@@ -23,7 +23,10 @@ preview: build ## Serve dist/ on http://localhost:$(PORT)
 	$(RUN) -p 127.0.0.1:$(PORT):4321 $(IMAGE) $(PNPM) preview
 up: ## Build the production image and serve it on http://localhost:$${SITE_PORT:-8321}
 	docker compose up -d --build
-down: ## Stop the production container
-	docker compose down
+down: ## Stop the production container (and the tunnel, if running)
+	docker compose --profile public down
 logs: ## Follow the production container's log
 	docker compose logs -f
+public: up ## Also serve it on a temporary public https address (Cloudflare quick tunnel)
+	docker compose --profile public up -d tunnel
+	@for i in $$(seq 1 30); do url=$$(docker compose logs tunnel 2>/dev/null | grep -o 'https://[a-z0-9-]*\.trycloudflare\.com' | tail -1); [ -n "$$url" ] && { echo "Public address: $$url"; exit 0; }; sleep 1; done; echo "No address yet: docker compose logs tunnel"; exit 1

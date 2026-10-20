@@ -11,7 +11,11 @@ has no Node: everything runs in Docker through `make`.
 | `make format` | Rewrites files the way `prettier --check` wants them                       |
 | `make build`  | Static build into `dist/`                                                  |
 | `make up`     | Builds the production image (Caddy) and serves it on http://localhost:8321 |
-| `make down`   | Stops it                                                                   |
+| `make public` | Also serves it on a temporary `https://….trycloudflare.com` address        |
+| `make down`   | Stops it, and the temporary address with it                                |
+
+Every push to `main` that passes `make check` publishes the same image, so it also runs
+without a checkout: `docker run -p 8321:8080 ghcr.io/univers42/hydrawn-site:latest`.
 
 Dependencies follow the app's rule: nothing younger than 7 days is installed
 (`minimumReleaseAge` in `pnpm-workspace.yaml`).

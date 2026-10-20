@@ -13,3 +13,17 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
+
+  # `make public`: a temporary https://<random>.trycloudflare.com address for the site,
+  # through a Cloudflare quick tunnel (no account). Each start gets a new address, so it
+  # is not restarted on its own: run `make public` again.
+  tunnel:
+    profiles: [public]
+    image: cloudflare/cloudflared:2026.10.0
+    command: tunnel --no-autoupdate --url http://site:8080
+    depends_on: [site]
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
