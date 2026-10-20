@@ -76,8 +76,8 @@ const extras = [
               aria-label={t.title}
               data-inview
             >
-              <source src={`/media/${t.clip}.webm`} type="video/webm" />
-              <source src={`/media/${t.clip}.mp4`} type="video/mp4" />
+              <source data-src={`/media/${t.clip}.webm`} type="video/webm" />
+              <source data-src={`/media/${t.clip}.mp4`} type="video/mp4" />
             </video>
           </div>
           <h3>{t.title}</h3>

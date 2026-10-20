@@ -47,22 +47,60 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       // Every clip on the page (video[data-inview]) plays only while it is on screen, and
       // never on its own for people who asked for less motion: they get the poster and the
       // browser's own play button instead.
+      //
+      // A clip is fetched whole when it first comes on screen and played from memory; its
+      // <source> elements name the files as data-src, so the browser never loads one itself.
+      // Cloudflare Pages answers a byte-range request with the whole file (200, never 206),
+      // and Safari will not play a video from a server that does that: Apple requires range
+      // support on iPhone. Each clip loops whole anyway, so nothing more is downloaded.
+      // ponytail: fine for clips of a few MB; a much bigger one wants a host that answers
+      // ranges. A Pages Function on /media/* would, but its requests count against the same
+      // 100,000 a day as live sharing.
       const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const clips = document.querySelectorAll<HTMLVideoElement>("video[data-inview]");
-      if (still) {
-        for (const v of clips) v.controls = true;
-      } else {
-        const io = new IntersectionObserver(
-          (entries) => {
-            for (const e of entries) {
-              const v = e.target as HTMLVideoElement;
-              if (e.isIntersecting) void v.play().catch(() => undefined);
-              else v.pause();
+      const loads = new WeakMap<HTMLVideoElement, Promise<void>>();
+      const load = (v: HTMLVideoElement): Promise<void> => {
+        let loaded = loads.get(v);
+        if (!loaded) {
+          const source = [...v.querySelectorAll("source")].find((s) => v.canPlayType(s.type));
+          const file = source?.dataset.src;
+          loaded = file
+            ? fetch(file)
+                .then((r) => (r.ok ? r.blob() : Promise.reject(new Error(`HTTP ${r.status}`))))
+                .then((blob) => URL.createObjectURL(blob))
+                // Straight from the server, which every browser but Safari plays.
+                .catch(() => file)
+                .then((src) => {
+                  const pressed = !v.paused; // a press of play before the file was in
+                  v.src = src;
+                  if (pressed) void v.play().catch(() => undefined);
+                })
+            : Promise.resolve();
+          loads.set(v, loaded);
+        }
+        return loaded;
+      };
+      const shown = new Set<HTMLVideoElement>();
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            const v = e.target as HTMLVideoElement;
+            if (e.isIntersecting) {
+              shown.add(v);
+              void load(v)
+                .then(() => (still || !shown.has(v) ? undefined : v.play()))
+                .catch(() => undefined);
+            } else {
+              shown.delete(v);
+              v.pause();
             }
-          },
-          { threshold: 0.35 },
-        );
-        for (const v of clips) io.observe(v);
+          }
+        },
+        { threshold: 0.35 },
+      );
+      for (const v of clips) {
+        v.controls = still;
+        io.observe(v);
       }
     </script>
   </body>
