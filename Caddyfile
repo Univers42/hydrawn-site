@@ -7,8 +7,6 @@
 :8080 {
 	root * /srv
 	encode zstd gzip
-	# Cloudflare Pages' header rules, not a page.
-	respond /_headers 404
 	file_server
 
 	header {

@@ -17,6 +17,14 @@ has no Node: everything runs in Docker through `make`.
 Every push to `main` that passes `make check` publishes the same image, so it also runs
 without a checkout: `docker run -p 8321:8080 ghcr.io/univers42/hydrawn-site:latest`.
 
+## Where it is served
+
+- **hydrawn.js.org**: GitHub Pages, deployed by `.github/workflows/pages.yml` on every push
+  to `main` that passes `make check`. `public/CNAME` names the address; js.org's
+  `cnames_active.js` points it at `univers42.github.io/hydrawn-site`.
+- **The image**: `.github/workflows/image.yml` publishes `ghcr.io/univers42/hydrawn-site`.
+- **A temporary address**: `make public`, from this computer.
+
 Dependencies follow the app's rule: nothing younger than 7 days is installed
 (`minimumReleaseAge` in `pnpm-workspace.yaml`).
 
