@@ -19,9 +19,10 @@ without a checkout: `docker run -p 8321:8080 ghcr.io/univers42/hydrawn-site:late
 
 ## Where it is served
 
-- **hydrawn.js.org**: GitHub Pages, deployed by `.github/workflows/pages.yml` on every push
-  to `main` that passes `make check`. `public/CNAME` names the address; js.org's
-  `cnames_active.js` points it at `univers42.github.io/hydrawn-site`.
+- **https://hydrawn.pages.dev**: Cloudflare Pages (project `hydrawn`), deployed by
+  `.github/workflows/pages.yml` on every push to `main` that passes `make check`. It needs
+  the secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`; the variable
+  `PUBLIC_APP_URL` says where the app is. `public/_headers` sets its headers.
 - **The image**: `.github/workflows/image.yml` publishes `ghcr.io/univers42/hydrawn-site`.
 - **A temporary address**: `make public`, from this computer.
 

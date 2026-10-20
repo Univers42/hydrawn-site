@@ -1,7 +1,7 @@
-# The public address, hydrawn.js.org: GitHub Pages, deployed from main once the gate passes.
-# js.org points the name at univers42.github.io/hydrawn-site (its cnames_active.js), and
-# public/CNAME tells GitHub Pages to answer for it.
-name: Deploy to GitHub Pages
+# The public site on Cloudflare Pages (project "hydrawn", https://hydrawn.pages.dev),
+# deployed from main once the gate passes. The repository variable PUBLIC_APP_URL is where
+# its "Start drawing" links go; unset means the real address (src/lib/app.ts).
+name: Deploy to Cloudflare Pages
 
 on:
   push:
@@ -17,25 +17,18 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Gate and build
+        env:
+          PUBLIC_APP_URL: ${{ vars.PUBLIC_APP_URL }}
         run: make install check build
-      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+      - uses: cloudflare/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0 # v4.1.3
         with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-24.04
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # 2026-10-08: past the 7-day hold.
+          wranglerVersion: "4.149.0"
+          command: pages deploy dist --project-name hydrawn --branch main
