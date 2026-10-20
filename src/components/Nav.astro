@@ -1,6 +1,8 @@
 ---
+import GitHubMark from "./GitHubMark.astro";
 import Mark from "./Mark.astro";
 import { APP_URL } from "../lib/app.ts";
+import { REPOSITORY } from "../lib/contributors.ts";
 ---
 
 <header class="nav">
@@ -13,6 +15,9 @@ import { APP_URL } from "../lib/app.ts";
       <a href="#private">Privacy</a>
       <a href="#features">Features</a>
       <a href="#faq">Questions</a>
+      <a class="github" href={REPOSITORY} aria-label="Hydrawn on GitHub">
+        <GitHubMark class="github-mark" />
+      </a>
       <a class="go" href={APP_URL}>
         Start drawing
       </a>
@@ -82,12 +87,19 @@ import { APP_URL } from "../lib/app.ts";
   nav a:hover {
     color: var(--ink);
   }
+  .github {
+    display: inline-flex;
+  }
+  nav :global(.github-mark) {
+    width: 22px;
+    height: 22px;
+  }
   nav .go {
     color: var(--violet);
     font-weight: 600;
   }
   @media (max-width: 640px) {
-    nav a:not(.go) {
+    nav a:not(.go, .github) {
       display: none;
     }
   }

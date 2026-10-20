@@ -1,0 +1,109 @@
+---
+import GitHubMark from "./GitHubMark.astro";
+import { REPOSITORY, contributors } from "../lib/contributors.ts";
+
+const people = await contributors();
+---
+
+<section id="people" class="people" aria-labelledby="people-title">
+  <div class="wrap">
+    <h2 id="people-title">Built in the open</h2>
+    <p class="lede">
+      Every line of Hydrawn, the drawing engine included, is on GitHub. Read it, report what breaks,
+      or send a change.
+    </p>
+    {people.length > 0 && (
+      <ul class="faces" aria-label="The people who built it">
+        {people.map((person) => (
+          <li>
+            <a
+              href={person.profile}
+              title={`${person.login}: ${person.contributions} contributions`}
+            >
+              <img src={person.avatar} alt="" width="64" height="64" loading="lazy" />
+              <span>{person.login}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+    <a class="repo" href={REPOSITORY}>
+      <GitHubMark class="repo-mark" />
+      Univers42/hydrawn on GitHub
+    </a>
+  </div>
+</section>
+
+<style>
+  .people {
+    padding-block: clamp(72px, 11vw, 140px);
+    border-top: 1px solid #ecebf4;
+  }
+  h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: var(--step-4);
+    line-height: 1.04;
+    letter-spacing: -0.01em;
+  }
+  .lede {
+    max-width: var(--measure);
+    margin: 18px 0 0;
+    color: var(--ink-soft);
+  }
+  .faces {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(14px, 3vw, 28px);
+    margin: 36px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .faces a {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    color: var(--ink-soft);
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+  .faces a:hover {
+    color: var(--ink);
+  }
+  .faces img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #d9d8e6;
+    transition: transform 0.2s ease;
+  }
+  .faces a:hover img {
+    transform: translateY(-3px);
+  }
+  .repo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 36px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    background: var(--ink);
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .repo:hover {
+    background: var(--violet-deep);
+  }
+  .repo :global(.repo-mark) {
+    width: 20px;
+    height: 20px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .faces img {
+      transition: none;
+    }
+  }
+</style>
