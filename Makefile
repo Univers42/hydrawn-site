@@ -1,9 +1,10 @@
 # Everything runs in Docker: the host has no Node.
 IMAGE  := node:22-bookworm-slim
 PNPM   := corepack pnpm@10.32.1
-# -t only when there is a terminal, so the targets also run from scripts and CI.
+# -t only when there is a terminal, so the targets also run from scripts and CI. CI passes
+# through, so pnpm installs from the lockfile exactly (--frozen-lockfile) there.
 TTY    := $(shell [ -t 0 ] && echo -t)
-RUN    := docker run --rm -i $(TTY) --user "$$(id -u):$$(id -g)" -e HOME=/tmp -e ASTRO_TELEMETRY_DISABLED=1 -e COREPACK_HOME=/tmp/corepack \
+RUN    := docker run --rm -i $(TTY) --user "$$(id -u):$$(id -g)" -e HOME=/tmp -e ASTRO_TELEMETRY_DISABLED=1 -e CI -e COREPACK_HOME=/tmp/corepack \
           -e npm_config_store_dir=/app/.pnpm-store -v "$(CURDIR)":/app -w /app
 PORT   ?= 4321
 
