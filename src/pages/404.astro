@@ -1,0 +1,51 @@
+---
+import Base from "../layouts/Base.astro";
+import Mark from "../components/Mark.astro";
+import Nav from "../components/Nav.astro";
+---
+
+<Base title="Not found · Hydrawn" description="There is no page at this address.">
+  <Nav />
+  <main class="wrap missing">
+    <Mark size="full" class="lost" />
+    <h1>Nothing drawn here yet.</h1>
+    <p>There is no page at this address. The drawing board is one click away.</p>
+    <p class="links">
+      <a href="/">Back to the home page</a>
+      <a href="https://app.hydrawn.js.org">Start drawing</a>
+    </p>
+  </main>
+</Base>
+
+<style>
+  .missing {
+    display: grid;
+    justify-items: start;
+    gap: 6px;
+    padding-block: 48px 120px;
+  }
+  .missing :global(.lost) {
+    width: 140px;
+    height: 140px;
+    transform: rotate(-8deg);
+  }
+  h1 {
+    margin: 18px 0 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: var(--step-4);
+    line-height: 1.05;
+  }
+  p {
+    margin: 0;
+    color: var(--ink-soft);
+  }
+  .links {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    font-weight: 600;
+    color: var(--violet);
+  }
+</style>

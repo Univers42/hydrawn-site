@@ -1,0 +1,23 @@
+---
+import Base from "../layouts/Base.astro";
+import Closing from "../components/Closing.astro";
+import Features from "../components/Features.astro";
+import Hero from "../components/Hero.astro";
+import Local from "../components/Local.astro";
+import Nav from "../components/Nav.astro";
+import Private from "../components/Private.astro";
+---
+
+<Base
+  title="Hydrawn — a free whiteboard you can share privately"
+  description="Draw in your browser and share a link to draw together, end-to-end encrypted. Free, no account, nothing to install."
+>
+  <Nav />
+  <main>
+    <Hero />
+    <Private />
+    <Local />
+    <Features />
+  </main>
+  <Closing />
+</Base>

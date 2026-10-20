@@ -1,0 +1,7 @@
+# Same rule as the app: nothing younger than 7 days is installed.
+minimumReleaseAge: 10080
+
+# pnpm blocks install scripts by default; these two need theirs.
+onlyBuiltDependencies:
+  - esbuild
+  - sharp

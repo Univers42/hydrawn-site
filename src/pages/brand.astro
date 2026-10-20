@@ -1,0 +1,177 @@
+---
+import Base from "../layouts/Base.astro";
+import Mark from "../components/Mark.astro";
+import Nav from "../components/Nav.astro";
+
+const fullSizes = [320, 160, 96, 64, 48];
+const smallSizes = [32, 24, 16];
+---
+
+<Base
+  title="Hydrawn brand"
+  description="The Hydrawn mark: a three-headed hydra whose heads are fountain-pen nibs."
+>
+  <Nav />
+  <main class="wrap brand">
+    <h1>The mark</h1>
+    <p class="lede">
+      A round little hydra with three heads, each a fountain-pen nib, standing on the line it drew.
+      The full mark is for 48 px and up; the small one, with no line, arms or feet, is for 32 px and
+      below.
+    </p>
+
+    <section class="tones" aria-label="The mark on light, dark and as an app icon">
+      <figure class="tile light">
+        <Mark size="full" label="Hydrawn mark on white" class="hero-mark" />
+        <figcaption>On white</figcaption>
+      </figure>
+      <figure class="tile dark">
+        <Mark size="full" label="Hydrawn mark on dark" class="hero-mark" />
+        <figcaption>On dark</figcaption>
+      </figure>
+      <figure class="tile icon">
+        <span class="icon-box">
+          <Mark size="small" label="Hydrawn app icon" class="icon-mark" />
+        </span>
+        <figcaption>App icon</figcaption>
+      </figure>
+    </section>
+
+    <section class="ladder" aria-label="The mark at every size">
+      {fullSizes.map((s) => (
+        <div class="step">
+          <span class="box" style={`width:${s}px;height:${s}px`}>
+            <Mark size="full" />
+          </span>
+          <span class="px">{s}</span>
+        </div>
+      ))}
+      {smallSizes.map((s) => (
+        <div class="step">
+          <span class="box" style={`width:${s}px;height:${s}px`}>
+            <Mark size="small" />
+          </span>
+          <span class="px">{s}</span>
+        </div>
+      ))}
+    </section>
+
+    <section class="lockup" aria-label="The mark with the word">
+      <Mark size="full" class="lockup-mark" />
+      <span class="word">Hydrawn</span>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .brand {
+    padding-block: 32px 96px;
+  }
+  h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: var(--step-4);
+    line-height: 1.05;
+  }
+  .lede {
+    max-width: var(--measure);
+    color: var(--ink-soft);
+  }
+  .tones {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .tile {
+    margin: 0;
+    display: grid;
+    justify-items: center;
+    gap: 12px;
+    padding: 28px 20px 18px;
+    border-radius: 18px;
+    border: 1px solid #e3e2ee;
+  }
+  .tile figcaption {
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+  }
+  .light {
+    background: #fff;
+  }
+  .dark {
+    background: var(--night);
+    border-color: var(--night);
+    --mk-bg: var(--night);
+    --mk-ink: #e7e5f6;
+    --mk-violet: #8f95f0;
+    --mk-deep: #6b6fd6;
+    --mk-wood: #4b4892;
+    --mk-pupil: #16152b;
+  }
+  .dark figcaption {
+    color: var(--night-soft);
+  }
+  .tile :global(.hero-mark) {
+    width: min(260px, 100%);
+    aspect-ratio: 1;
+  }
+  .icon-box {
+    display: grid;
+    place-items: center;
+    width: 200px;
+    height: 200px;
+    border-radius: 46px;
+    background: var(--violet);
+    --mk-violet: #fff;
+    --mk-deep: #d6d4f8;
+    --mk-ink: var(--ink);
+    --mk-eye: var(--violet);
+    --mk-pupil: #fff;
+    --mk-bg: var(--violet);
+  }
+  .icon-box :global(.icon-mark) {
+    width: 150px;
+    height: 150px;
+  }
+  .ladder {
+    margin-top: 48px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 28px;
+  }
+  .step {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+  }
+  .box {
+    display: block;
+  }
+  .box :global(.mark) {
+    width: 100%;
+    height: 100%;
+  }
+  .px {
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .lockup {
+    margin-top: 56px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .lockup :global(.lockup-mark) {
+    width: 96px;
+    height: 96px;
+  }
+  .word {
+    font-family: var(--font-display);
+    font-size: 4rem;
+    letter-spacing: -0.01em;
+  }
+</style>

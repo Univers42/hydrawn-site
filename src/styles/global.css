@@ -1,0 +1,179 @@
+@import "tailwindcss";
+@import "@fontsource/gloock/400.css";
+@import "@fontsource-variable/hanken-grotesk/index.css";
+
+/* Layout: the page is a sheet of the app's own canvas — dot grid, ink, violet selection
+   chrome — read left to right, with one dark band where the subject is the key. */
+@font-face {
+  font-family: "Excalifont";
+  src: url("/fonts/excalifont-latin.woff2") format("woff2");
+  font-display: swap;
+}
+
+:root {
+  /* The app's canvas, accent and ink, so the site and the app read as one thing. */
+  --paper: #ffffff;
+  --grid: #dddcea;
+  --ink: #1b1a2e;
+  --ink-soft: #55536e;
+  --violet: #6965db;
+  --violet-deep: #4b47b8;
+  --night: #16152b;
+  --night-ink: #ecebf8;
+  --night-soft: #a6a4c4;
+  --highlight: #ffec99;
+  /* Collaborator colours, from the app's own stroke palette. */
+  --peer-green: #2f9e44;
+  --peer-orange: #f08c00;
+  --peer-blue: #1971c2;
+  /* Name tags on the cursors: white on this green, ink on the orange, both at 6:1 or better. */
+  --peer-green-tag: #237032;
+
+  --font-display: "Gloock", "Georgia", "Times New Roman", serif;
+  --font-text: "Hanken Grotesk Variable", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  --font-hand: "Excalifont", "Segoe Print", "Comic Sans MS", cursive;
+  --font-code: ui-monospace, "SFMono-Regular", "Cascadia Code", Menlo, Consolas, monospace;
+
+  /* Type scale, a perfect fourth from 17px. */
+  --step-0: 1.0625rem;
+  --step-1: 1.4167rem;
+  --step-2: 1.889rem;
+  --step-3: 2.518rem;
+  --step-4: clamp(2.6rem, 6vw, 3.357rem);
+  --step-5: clamp(3.2rem, 9vw, 6.8rem);
+
+  --gutter: max(20px, env(safe-area-inset-left, 0px));
+  --measure: 62ch;
+
+  /* Mark colours on the light page. */
+  --mk-bg: var(--paper);
+  --mk-ink: var(--ink);
+  --mk-violet: var(--violet);
+  --mk-deep: var(--violet-deep);
+  --mk-wood: #d6d4f8;
+  --mk-eye: #ffffff;
+  --mk-pupil: #1e1c3a;
+}
+
+html {
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 80px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  background-image: radial-gradient(circle at 1px 1px, var(--grid) 1.1px, transparent 0);
+  background-size: 22px 22px;
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  font-feature-settings: "ss01";
+}
+
+:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+a {
+  color: inherit;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+
+/* The mark's parts, coloured from whatever --mk-* the container sets. */
+.mark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.mark .sv,
+.mark .si,
+.mark .sb {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.mark .sv {
+  stroke: var(--mk-violet);
+}
+.mark .si {
+  stroke: var(--mk-ink);
+}
+.mark .sb {
+  stroke: var(--mk-bg);
+}
+.mark .fv {
+  fill: var(--mk-violet);
+}
+.mark .fd {
+  fill: var(--mk-deep);
+}
+.mark .fi {
+  fill: var(--mk-ink);
+}
+.mark .fb {
+  fill: var(--mk-bg);
+}
+.mark .fw {
+  fill: var(--mk-wood);
+}
+.mark .fe {
+  fill: var(--mk-eye);
+}
+.mark .fp {
+  fill: var(--mk-pupil);
+}
+
+/* Drawing in: a mark with .drawing draws its strokes and pops its parts once. */
+.drawing .ds {
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 1.02;
+  animation: mark-draw var(--dur, 0.5s) cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0s) both;
+}
+.drawing .df {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: mark-pop 0.36s cubic-bezier(0.2, 0.8, 0.3, 1.25) var(--d, 0s) both;
+}
+@keyframes mark-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes mark-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+  }
+}

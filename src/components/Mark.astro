@@ -1,0 +1,27 @@
+---
+import { markFull, markSmall } from "../lib/mark";
+
+interface Props {
+  size: "full" | "small";
+  class?: string;
+  /** Plays the drawing-in once on load. */
+  draw?: boolean;
+  label?: string;
+}
+
+const { size, class: className = "", draw = false, label } = Astro.props;
+const body = size === "full" ? markFull() : markSmall();
+const a11y = label ? `role="img" aria-label="${label}"` : 'aria-hidden="true"';
+---
+
+<span class:list={["mark", className]}>
+  <Fragment
+    set:html={`<svg viewBox="0 0 64 64" ${a11y} focusable="false" class="${draw ? "drawing" : ""}">${body}</svg>`}
+  />
+</span>
+
+<style>
+  .mark {
+    display: inline-block;
+  }
+</style>

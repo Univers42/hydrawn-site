@@ -1,0 +1,69 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link
+      rel="preload"
+      href="/fonts/excalifont-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={new URL("/og.png", Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Hydrawn: many heads, one drawing. A three-headed hydra whose heads are pen nibs."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#ffffff" />
+  </head>
+  <body>
+    <slot />
+    <script>
+      // Every clip on the page (video[data-inview]) plays only while it is on screen, and
+      // never on its own for people who asked for less motion: they get the poster and the
+      // browser's own play button instead.
+      const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const clips = document.querySelectorAll<HTMLVideoElement>("video[data-inview]");
+      if (still) {
+        for (const v of clips) v.controls = true;
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              const v = e.target as HTMLVideoElement;
+              if (e.isIntersecting) void v.play().catch(() => undefined);
+              else v.pause();
+            }
+          },
+          { threshold: 0.35 },
+        );
+        for (const v of clips) io.observe(v);
+      }
+    </script>
+  </body>
+</html>

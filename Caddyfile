@@ -1,0 +1,30 @@
+# Static files only. TLS is whoever sits in front of this (a tunnel or a proxy).
+{
+	admin off
+	auto_https off
+}
+
+:8080 {
+	root * /srv
+	encode zstd gzip
+	file_server
+
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		X-Frame-Options DENY
+		-Server
+	}
+
+	# Astro fingerprints everything under /_astro, so it never changes under one name.
+	@hashed path /_astro/*
+	header @hashed Cache-Control "public, max-age=31536000, immutable"
+	@media path /media/* /fonts/*
+	header @media Cache-Control "public, max-age=86400"
+
+	handle_errors {
+		rewrite * /404.html
+		file_server
+	}
+}

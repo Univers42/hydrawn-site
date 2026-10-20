@@ -1,0 +1,130 @@
+.rd {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(28px, 7vw, 120px);
+  padding-block: 12px;
+}
+
+.rd-device,
+.rd-relay {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 10px;
+  border-radius: 14px;
+}
+
+.rd-device {
+  padding: 12px 12px 14px;
+  background: #ffffff;
+  color: #1b1a2e;
+  box-shadow: 0 18px 40px -22px rgb(0 0 0 / 0.7);
+}
+
+.rd-name {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: inherit;
+}
+
+.rd-sketch {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  background-color: #fff;
+  background-image: radial-gradient(circle at 1px 1px, #dddcea 1px, transparent 0);
+  background-size: 10px 10px;
+}
+.rd-sketch path,
+.rd-sketch ellipse {
+  fill: none;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.rd-ink {
+  stroke: #1b1a2e;
+}
+.rd-violet {
+  stroke: #6965db;
+}
+
+.rd-peer {
+  position: absolute;
+  top: 46%;
+  right: -10px;
+  padding: 1px 8px 2px;
+  border-radius: 6px;
+  background: var(--peer-green-tag, #237032);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.rd-keychip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 3px 9px 3px 6px;
+  border-radius: 999px;
+  background: #ffec99;
+  color: #1b1a2e;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.rd-key-icon {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+.rd-relay {
+  justify-items: center;
+  padding: 14px 12px;
+  border: 1.5px dashed rgb(236 235 248 / 0.35);
+  background: #1f1e3a;
+  color: var(--night-ink, #ecebf8);
+  text-align: center;
+}
+.rd-bytes {
+  margin: 0;
+  font-family: var(--font-code);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: #a6a4c4;
+  white-space: pre;
+  font-variant-numeric: tabular-nums;
+}
+.rd-note {
+  font-family: var(--font-hand);
+  font-size: 1rem;
+  color: #ffec99;
+}
+
+@media (max-width: 640px) {
+  .rd {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "you ada"
+      "relay relay";
+    row-gap: 56px;
+    column-gap: 16px;
+  }
+  .rd > :nth-child(1) {
+    grid-area: you;
+  }
+  .rd > :nth-child(2) {
+    grid-area: relay;
+    justify-self: center;
+    width: min(220px, 100%);
+  }
+  .rd > :nth-child(3) {
+    grid-area: ada;
+  }
+}

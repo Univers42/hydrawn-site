@@ -1,0 +1,42 @@
+{
+  "name": "hydrawn-site",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.32.1",
+  "scripts": {
+    "dev": "astro dev --host 0.0.0.0 --port 4321",
+    "build": "astro build",
+    "preview": "astro preview --host 0.0.0.0 --port 4321",
+    "check": "astro check && eslint . --max-warnings 0 && prettier --check .",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "@astrojs/react": "^7.0.0",
+    "@astrojs/sitemap": "^3.7.0",
+    "@fontsource-variable/hanken-grotesk": "^5.3.0",
+    "@fontsource/gloock": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.0",
+    "astro": "^7.0.0",
+    "motion": "^14.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwindcss": "^4.3.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.0",
+    "@eslint/js": "^9.39.5",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "eslint": "^9.39.5",
+    "eslint-plugin-astro": "^1.7.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.10",
+    "prettier-plugin-astro": "^1.1.1",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.71.2"
+  }
+}

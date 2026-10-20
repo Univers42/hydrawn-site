@@ -1,0 +1,15 @@
+# The production site, as it will be served: `make up`, then http://localhost:8321.
+services:
+  site:
+    build: .
+    image: hydrawn-site:local
+    ports:
+      - "127.0.0.1:${SITE_PORT:-8321}:8080"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped

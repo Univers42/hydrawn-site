@@ -1,0 +1,93 @@
+---
+import Mark from "./Mark.astro";
+---
+
+<header class="nav">
+  <div class="wrap bar">
+    <a class="brand" href="/" aria-label="Hydrawn, home">
+      <Mark size="small" class="brand-mark" />
+      <span class="word">Hydrawn</span>
+    </a>
+    <nav aria-label="Site">
+      <a href="#private">Privacy</a>
+      <a href="#features">Features</a>
+      <a href="#faq">Questions</a>
+      <a class="go" href="https://app.hydrawn.js.org">
+        Start drawing
+      </a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  /* Sticky, on a frosted strip of the page's own paper; the hairline under it appears
+     once the page has scrolled, driven by the scroll itself where the browser can. */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding-top: env(safe-area-inset-top, 0px);
+    background: rgb(255 255 255 / 0.82);
+    backdrop-filter: saturate(1.4) blur(10px);
+    -webkit-backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid transparent;
+  }
+  @supports (animation-timeline: scroll()) {
+    .nav {
+      animation: nav-edge linear both;
+      animation-timeline: scroll();
+      animation-range: 0 80px;
+    }
+    @keyframes nav-edge {
+      to {
+        border-bottom-color: #e3e2ee;
+      }
+    }
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 64px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .brand :global(.brand-mark) {
+    width: 34px;
+    height: 34px;
+  }
+  .word {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    letter-spacing: -0.01em;
+  }
+  nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 2.4vw, 28px);
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+  nav a {
+    text-decoration: none;
+    color: var(--ink-soft);
+  }
+  nav a:hover {
+    color: var(--ink);
+  }
+  nav .go {
+    color: var(--violet);
+    font-weight: 600;
+  }
+  @media (max-width: 640px) {
+    nav a:not(.go) {
+      display: none;
+    }
+  }
+</style>

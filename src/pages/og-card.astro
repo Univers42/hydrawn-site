@@ -1,0 +1,107 @@
+---
+// The share card (1200×630) and the touch icon (180×180), drawn with the site's own fonts
+// and mark. Rendered to public/og.png and public/apple-touch-icon.png by screenshotting
+// #og and #touch at those sizes; re-render after changing the mark. Not linked, not indexed.
+import "../styles/global.css";
+import Mark from "../components/Mark.astro";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <title>Hydrawn share card</title>
+  </head>
+  <body class="og-page">
+    <div id="og">
+      <div class="og-copy">
+        <span class="og-word">Hydrawn</span>
+        <span class="og-line">
+          Many heads.
+          <br />
+          One drawing.
+        </span>
+        <span class="og-tag">
+          A free whiteboard in your browser.
+          <br />
+          Share a link, draw together, end-to-end encrypted.
+        </span>
+        <span class="og-url">hydrawn.js.org</span>
+      </div>
+      <Mark size="full" class="og-mark" />
+    </div>
+    <div id="touch">
+      <Mark size="small" class="touch-mark" />
+    </div>
+  </body>
+</html>
+
+<style>
+  .og-page {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+  #og {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 1200px;
+    height: 630px;
+    padding: 0 72px 0 88px;
+    box-sizing: border-box;
+    background-color: #fff;
+    background-image: radial-gradient(circle at 1px 1px, var(--grid) 1.4px, transparent 0);
+    background-size: 26px 26px;
+  }
+  .og-copy {
+    display: grid;
+    gap: 18px;
+  }
+  .og-word {
+    font-family: var(--font-display);
+    font-size: 40px;
+    color: var(--violet);
+  }
+  .og-line {
+    font-family: var(--font-display);
+    font-size: 92px;
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .og-tag {
+    font-size: 26px;
+    line-height: 1.4;
+    color: var(--ink-soft);
+  }
+  .og-url {
+    margin-top: 6px;
+    font-family: var(--font-hand);
+    font-size: 30px;
+    color: var(--violet);
+  }
+  #og :global(.og-mark) {
+    width: 400px;
+    height: 400px;
+    flex: none;
+  }
+  #touch {
+    display: grid;
+    place-items: center;
+    width: 180px;
+    height: 180px;
+    background: var(--violet);
+    --mk-violet: #fff;
+    --mk-deep: #d6d4f8;
+    --mk-ink: var(--ink);
+    --mk-eye: var(--violet);
+    --mk-pupil: #fff;
+    --mk-bg: var(--violet);
+  }
+  #touch :global(.touch-mark) {
+    width: 140px;
+    height: 140px;
+  }
+</style>
