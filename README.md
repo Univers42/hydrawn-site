@@ -21,8 +21,13 @@ without a checkout: `docker run -p 8321:8080 ghcr.io/univers42/hydrawn-site:late
 
 - **https://hydrawn.pages.dev**: Cloudflare Pages (project `hydrawn`), deployed by
   `.github/workflows/pages.yml` on every push to `main` that passes `make check`. It needs
-  the secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`; the variable
-  `PUBLIC_APP_URL` says where the app is. `public/_headers` sets its headers.
+  the secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. The app's address is
+  `src/lib/app.ts`; a repository variable `PUBLIC_APP_URL` overrides it. `public/_headers`
+  sets its headers.
+- **hydrawn.eu.org** (requested, awaiting eu.org's approval): the zone is in Cloudflare
+  with `hydrawn.eu.org` → `hydrawn.pages.dev` and `app.hydrawn.eu.org` →
+  `hydrawn-app.pages.dev`, both attached to their Pages projects. Once it is approved,
+  point `site` (`astro.config.mjs`) and `APP_URL` (`src/lib/app.ts`) at it.
 - **The image**: `.github/workflows/image.yml` publishes `ghcr.io/univers42/hydrawn-site`.
 - **A temporary address**: `make public`, from this computer.
 

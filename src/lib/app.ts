@@ -3,4 +3,5 @@
 // from somewhere else, such as a temporary tunnel.
 const fromBuild: string | undefined = import.meta.env.PUBLIC_APP_URL;
 
-export const APP_URL = fromBuild || "https://app.hydrawn.js.org";
+// app.hydrawn.eu.org once eu.org has approved hydrawn.eu.org (see astro.config.mjs).
+export const APP_URL = fromBuild || "https://hydrawn-app.pages.dev";

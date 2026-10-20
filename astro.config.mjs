@@ -8,7 +8,9 @@ import { defineConfig } from "astro/config";
 const usePolling = process.env.SITE_USE_POLLING === "1";
 
 export default defineConfig({
-  site: "https://hydrawn.js.org",
+  // Where the canonical links, the sitemap and the share card point. hydrawn.eu.org is
+  // requested and set up in Cloudflare; switch to it once eu.org has approved it.
+  site: "https://hydrawn.pages.dev",
   // The toolbar floats over the page being designed; the live preview is for looking at it.
   devToolbar: { enabled: false },
   integrations: [react(), sitemap({ filter: (page) => !page.includes("/og-card") })],
