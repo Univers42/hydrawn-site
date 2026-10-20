@@ -21,15 +21,18 @@ import RelayDiagram from "./RelayDiagram.tsx";
         loop
         playsinline
         preload="metadata"
-        poster="/media/together.webp"
-        aria-label="Two browsers on one drawing: a rectangle drawn in one appears in the other, and an arrow drawn back appears in the first"
+        poster="/media/crowd.webp"
+        aria-label="Six browsers on one drawing, side by side, each named: whatever one person adds appears in the other five as it is drawn"
         data-inview
       >
-        <source src="/media/together.webm" type="video/webm" />
-        <source src="/media/together.mp4" type="video/mp4" />
+        <source src="/media/crowd.webm" type="video/webm" />
+        <source src="/media/crowd.mp4" type="video/mp4" />
       </video>
       <figcaption>
-        Two browsers on one drawing, recorded as it happened. Underneath, this is what travels:
+        Six browsers on one drawing, recorded as it happened (the film on it is{" "}
+        <i>Big Buck Bunny</i> © Blender Foundation,{" "}
+        <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>). Underneath, this is
+        what travels:
       </figcaption>
     </figure>
 
@@ -112,7 +115,7 @@ import RelayDiagram from "./RelayDiagram.tsx";
   .together video {
     display: block;
     width: 100%;
-    aspect-ratio: 1616 / 640;
+    aspect-ratio: 1920 / 800;
     border-radius: 12px;
     background: #e3e2ee;
     box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.8);
