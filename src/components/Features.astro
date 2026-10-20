@@ -1,50 +1,55 @@
 ---
-interface Tile {
+interface Clip {
   clip: string;
   title: string;
   line: string;
-  size: "wide" | "half" | "third";
-  /** Cut tall to stand as high as the wide tile beside it. */
-  tall?: boolean;
+  /** What the recording shows, for a screen reader; the title when absent. */
+  label?: string;
 }
 
-const tiles: Tile[] = [
+/** The longer recordings, each of something hard, shown large. */
+const reels: Clip[] = [
+  {
+    clip: "photo",
+    title: "A photo, turned into shapes",
+    line: "Drop in a photo and vectorise it: it becomes about a hundred shapes, each one yours to recolour and restyle.",
+    label:
+      "A photo of a red panda is vectorised into 99 shapes; the background and a branch are recoloured and a title is added",
+  },
+  {
+    clip: "deck",
+    title: "Present like Prezi",
+    line: "Frames become slides. The presentation flies from one to the next and zooms into a drawing inside a drawing.",
+    label:
+      "An eleven-slide presentation flies between frames and zooms into drawings inside drawings, from a house at night to a treehouse",
+  },
+  {
+    clip: "diagram",
+    title: "Mermaid to diagram",
+    line: "Paste Mermaid text and get the whole diagram as shapes and bound arrows, then restyle it by hand.",
+    label:
+      "Mermaid text is imported as a diagram, recoloured, and a shape is moved while its arrows follow",
+  },
+  {
+    clip: "notes",
+    title: "Sticky notes for a team",
+    line: "A retro on one board: everyone drops notes, groups them under headings by colour and marks the ones that matter.",
+    label:
+      "Four people fill a retro board with sticky notes under three headings, group them and vote on them",
+  },
+];
+
+/** The shorter ones, side by side. */
+const tiles: Clip[] = [
   {
     clip: "arrows",
     title: "Arrows that stay attached",
     line: "Draw an arrow from one shape to another and it holds on. Move either shape and the arrow follows.",
-    size: "wide",
-  },
-  {
-    clip: "sticky",
-    title: "Sticky notes",
-    line: "Drop a note, type on it, and it grows to fit what you wrote.",
-    size: "third",
-    tall: true,
-  },
-  {
-    clip: "mermaid",
-    title: "Mermaid to diagram",
-    line: "Paste a Mermaid flowchart and it lands on the board as shapes and arrows you can edit.",
-    size: "half",
-  },
-  {
-    clip: "vectorize",
-    title: "Trace a picture",
-    line: "Right-click an image and turn it into editable shapes.",
-    size: "half",
-  },
-  {
-    clip: "present",
-    title: "Present with a laser",
-    line: "Walk through the board frame by frame, pointing as you go.",
-    size: "half",
   },
   {
     clip: "templates",
     title: "Start from a template",
     line: "A retro, a mind map, a pitch, an architecture sketch or a checkout flow.",
-    size: "half",
   },
 ];
 
@@ -63,9 +68,34 @@ const extras = [
       stays quick. These are real recordings of the app.
     </p>
 
+    <ol class="reels">
+      {reels.map((r) => (
+        <li>
+          <div class="words">
+            <h3>{r.title}</h3>
+            <p>{r.line}</p>
+          </div>
+          <div class="clip">
+            <video
+              muted
+              loop
+              playsinline
+              preload="none"
+              poster={`/media/${r.clip}.webp`}
+              aria-label={r.label ?? r.title}
+              data-inview
+            >
+              <source data-src={`/media/${r.clip}.webm`} type="video/webm" />
+              <source data-src={`/media/${r.clip}.mp4`} type="video/mp4" />
+            </video>
+          </div>
+        </li>
+      ))}
+    </ol>
+
     <ul class="bento">
       {tiles.map((t) => (
-        <li class:list={["tile", t.size, { tall: t.tall }]}>
+        <li class="tile">
           <div class="clip">
             <video
               muted
@@ -119,27 +149,49 @@ const extras = [
     color: var(--ink-soft);
   }
 
-  .bento {
+  .reels {
     margin: clamp(40px, 6vw, 64px) 0 0;
     padding: 0;
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: clamp(40px, 7vw, 88px);
+  }
+  .reels li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2.4fr);
+    gap: clamp(20px, 4vw, 48px);
+    align-items: center;
+  }
+  .reels li:nth-child(even) .words {
+    order: 2;
+  }
+  .reels h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: var(--step-2);
+    line-height: 1.1;
+  }
+  .reels p {
+    margin: 12px 0 0;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .reels .clip {
+    margin: 0;
+  }
+
+  .bento {
+    margin: clamp(48px, 8vw, 96px) 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
   }
   .tile {
     display: grid;
     grid-template-rows: auto auto 1fr;
     gap: 6px;
-  }
-  .wide {
-    grid-column: span 4;
-  }
-  .third {
-    grid-column: span 2;
-  }
-  .half {
-    grid-column: span 3;
   }
   .clip {
     margin-bottom: 10px;
@@ -155,10 +207,6 @@ const extras = [
     aspect-ratio: 16 / 10;
     object-fit: cover;
     background: #fff;
-  }
-  /* 7:9 beside a 16:10 tile twice its width ends level with it, within a pixel or two. */
-  .tall video {
-    aspect-ratio: 7 / 9;
   }
   h3 {
     margin: 0;
@@ -193,27 +241,17 @@ const extras = [
     font-size: 0.9875rem;
   }
 
-  @media (max-width: 900px) {
-    .wide,
-    .half,
-    .third {
-      grid-column: span 3;
+  @media (max-width: 760px) {
+    .reels li {
+      grid-template-columns: minmax(0, 1fr);
     }
-    .wide {
-      grid-column: span 6;
-    }
-    .tall video {
-      aspect-ratio: 16 / 10;
+    .reels li:nth-child(even) .words {
+      order: 0;
     }
   }
   @media (max-width: 560px) {
     .bento {
       grid-template-columns: minmax(0, 1fr);
-    }
-    .wide,
-    .half,
-    .third {
-      grid-column: auto;
     }
   }
 </style>

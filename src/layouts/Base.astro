@@ -48,7 +48,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       // never on its own for people who asked for less motion: they get the poster and the
       // browser's own play button instead.
       //
-      // A clip is fetched whole when it first comes on screen and played from memory; its
+      // A clip is fetched whole a screen before it comes on screen and played from memory; its
       // <source> elements name the files as data-src, so the browser never loads one itself.
       // Cloudflare Pages answers a byte-range request with the whole file (200, never 206),
       // and Safari will not play a video from a server that does that: Apple requires range
@@ -98,9 +98,17 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         },
         { threshold: 0.35 },
       );
+      // Fetched a screen ahead, so a clip is in memory by the time it is scrolled to.
+      const ahead = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) if (e.isIntersecting) void load(e.target as HTMLVideoElement);
+        },
+        { rootMargin: "100% 0px" },
+      );
       for (const v of clips) {
         v.controls = still;
         io.observe(v);
+        ahead.observe(v);
       }
     </script>
   </body>
