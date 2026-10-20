@@ -1,7 +1,6 @@
 ---
 import Mark from "./Mark.astro";
-
-const APP = "https://app.hydrawn.js.org";
+import { APP_URL } from "../lib/app.ts";
 ---
 
 <section class="hero" aria-labelledby="hero-title">
@@ -21,7 +20,7 @@ const APP = "https://app.hydrawn.js.org";
         encrypted. No account, nothing to install.
       </p>
       <div class="actions">
-        <a class="start" href={APP}>
+        <a class="start" href={APP_URL}>
           Start drawing
         </a>
         <a class="source" href="https://github.com/Univers42/hydrawn">

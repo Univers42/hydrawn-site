@@ -1,7 +1,10 @@
 # The production site, as it will be served: `make up`, then http://localhost:8321.
 services:
   site:
-    build: .
+    build:
+      context: .
+      args:
+        PUBLIC_APP_URL: ${PUBLIC_APP_URL:-}
     image: hydrawn-site:local
     ports:
       - "127.0.0.1:${SITE_PORT:-8321}:8080"

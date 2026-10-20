@@ -1,5 +1,6 @@
 ---
 import Mark from "./Mark.astro";
+import { APP_URL } from "../lib/app.ts";
 ---
 
 <header class="nav">
@@ -12,7 +13,7 @@ import Mark from "./Mark.astro";
       <a href="#private">Privacy</a>
       <a href="#features">Features</a>
       <a href="#faq">Questions</a>
-      <a class="go" href="https://app.hydrawn.js.org">
+      <a class="go" href={APP_URL}>
         Start drawing
       </a>
     </nav>

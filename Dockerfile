@@ -7,6 +7,8 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN corepack pnpm@10.32.1 install --frozen-lockfile
 COPY . .
+# Where the site's "Start drawing" links go; empty means the real address (src/lib/app.ts).
+ARG PUBLIC_APP_URL=
 RUN corepack pnpm@10.32.1 build
 
 FROM caddy:2.10.2-alpine

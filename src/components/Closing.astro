@@ -1,5 +1,6 @@
 ---
 import Mark from "./Mark.astro";
+import { APP_URL } from "../lib/app.ts";
 
 const faq = [
   [
@@ -43,7 +44,7 @@ const faq = [
   <div class="wrap last-inner">
     <Mark size="full" class="last-mark" />
     <h2 id="last-title">Grab a pen.</h2>
-    <a class="start" href="https://app.hydrawn.js.org">
+    <a class="start" href={APP_URL}>
       Start drawing
     </a>
     <p class="hand">it opens straight onto a blank drawing</p>
@@ -57,7 +58,7 @@ const faq = [
       <span>Hydrawn</span>
     </a>
     <nav aria-label="Footer">
-      <a href="https://app.hydrawn.js.org">The app</a>
+      <a href={APP_URL}>The app</a>
       <a href="https://github.com/Univers42/hydrawn">Source on GitHub</a>
       <a href="/brand/">Logo and brand</a>
     </nav>

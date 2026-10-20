@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import Mark from "../components/Mark.astro";
 import Nav from "../components/Nav.astro";
+import { APP_URL } from "../lib/app.ts";
 ---
 
 <Base title="Not found · Hydrawn" description="There is no page at this address.">
@@ -12,7 +13,7 @@ import Nav from "../components/Nav.astro";
     <p>There is no page at this address. The drawing board is one click away.</p>
     <p class="links">
       <a href="/">Back to the home page</a>
-      <a href="https://app.hydrawn.js.org">Start drawing</a>
+      <a href={APP_URL}>Start drawing</a>
     </p>
   </main>
 </Base>
