@@ -20,10 +20,11 @@ without a checkout: `docker run -p 8321:8080 ghcr.io/univers42/hydrawn-site:late
 ## Where it is served
 
 - **https://hydrawn.pages.dev**: Cloudflare Pages (project `hydrawn`), deployed by
-  `.github/workflows/pages.yml` on every push to `main` that passes `make check`. It needs
-  the secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. The app's address is
-  `src/lib/app.ts`; a repository variable `PUBLIC_APP_URL` overrides it. `public/_headers`
-  sets its headers.
+  `.github/workflows/release.yml`. It needs the secrets `CLOUDFLARE_API_TOKEN` and
+  `CLOUDFLARE_ACCOUNT_ID`. The app's address is `src/lib/app.ts`; a repository variable
+  `PUBLIC_APP_URL` overrides it. `public/_headers` sets its headers.
+- **A preview per pull request** at `https://pr-<number>.hydrawn.pages.dev`, linked from
+  the pull request and rebuilt on every push to it.
 - **hydrawn.eu.org** (requested, awaiting eu.org's approval): the zone is in Cloudflare
   with `hydrawn.eu.org` → `hydrawn.pages.dev` and `app.hydrawn.eu.org` →
   `hydrawn-app.pages.dev`, both attached to their Pages projects. Once it is approved,
@@ -33,6 +34,13 @@ without a checkout: `docker run -p 8321:8080 ghcr.io/univers42/hydrawn-site:late
 
 Dependencies follow the app's rule: nothing younger than 7 days is installed
 (`minimumReleaseAge` in `pnpm-workspace.yaml`).
+
+## Releasing
+
+Every change goes through a pull request; merge it with **squash**, so its title becomes
+the commit on `main`. Each merge is a release: `release.yml` passes `make check`, tags the
+next version from that title (`feat…` → minor, a `!` → major, anything else → patch),
+publishes a GitHub release listing the pull requests, and deploys the site.
 
 ## Where things are
 

@@ -1,0 +1,84 @@
+# Every change reaches the site through a pull request, and every merge into main is a
+# release.
+#   - A pull request: the gate and the build, then a preview on Cloudflare Pages at
+#     https://pr-<number>.hydrawn.pages.dev, linked from the pull request.
+#   - A merge into main: the next version is tagged (feat → minor, a "!" → major, anything
+#     else → patch; the squash commit's subject is the pull request's title), a GitHub release
+#     lists the pull requests in it, and the site goes to https://hydrawn.pages.dev.
+# The repository variable PUBLIC_APP_URL is where the "Start drawing" links go; unset means
+# the real address (src/lib/app.ts).
+name: Release
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Releases one at a time and never cancelled half-way, so each one tags after the last;
+# a preview is replaced by the next push to its pull request.
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('preview-{0}', github.event.pull_request.number) || 'release' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write # the tag and the release
+      pull-requests: write # the preview link
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # the tags, to find the last version
+      - name: Gate and build
+        env:
+          PUBLIC_APP_URL: ${{ vars.PUBLIC_APP_URL }}
+        run: make install check build
+      - name: Next version
+        if: github.event_name != 'pull_request'
+        id: version
+        run: |
+          last=$(git tag --list 'v[0-9]*' --sort=-v:refname | head -n1)
+          subject=$(git log -1 --format=%s)
+          if [ -z "$last" ]; then
+            next=v1.0.0
+          else
+            IFS=. read -r major minor patch <<<"${last#v}"
+            case "$subject" in
+              *!:*) next="v$((major + 1)).0.0" ;;
+              feat*) next="v$major.$((minor + 1)).0" ;;
+              *) next="v$major.$minor.$((patch + 1))" ;;
+            esac
+          fi
+          echo "Releasing $next (after ${last:-nothing}): $subject"
+          echo "tag=$next" >>"$GITHUB_OUTPUT"
+      # Wrangler itself rather than wrangler-action: the action reads pnpm-lock.yaml and
+      # runs pnpm, which exists here only inside the Docker tooling, never on the runner.
+      # A pull request from a fork gets no secrets, so it gets no preview either.
+      - name: Deploy
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          WRANGLER_SEND_METRICS: "false"
+          BRANCH: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'main' }}
+        # 4.149.0 is from 2026-10-08: past the 7-day hold.
+        run: npx -y wrangler@4.149.0 pages deploy dist --project-name hydrawn --branch "$BRANCH"
+      - name: Release
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: gh release create "$TAG" --target "$GITHUB_SHA" --title "$TAG" --generate-notes
+      # The preview's address never changes for a pull request, so it is posted once.
+      - name: Link the preview
+        if: github.event_name == 'pull_request' && github.event.action == 'opened' && github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          gh pr comment "$PR" --body "Preview: https://pr-$PR.hydrawn.pages.dev (rebuilt on every push)"
