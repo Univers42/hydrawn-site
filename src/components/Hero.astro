@@ -55,14 +55,19 @@ import { APP_URL } from "../lib/app.ts";
         loop
         playsinline
         preload="metadata"
-        poster="/media/tour.webp"
+        poster="/media/workspace.webp"
         data-inview
-        aria-label="A recording of Hydrawn: shapes, a connected arrow, a freehand line and text being drawn"
+        aria-label="Six people build one project board at the same time, each cursor named: a title, a colour-coded flow of connected boxes, sticky notes, a timeline, a playing YouTube video, a photo and a hand-drawn sketch"
       >
-        <source src="/media/tour.webm" type="video/webm" />
-        <source src="/media/tour.mp4" type="video/mp4" />
+        <source src="/media/workspace.webm" type="video/webm" />
+        <source src="/media/workspace.mp4" type="video/mp4" />
       </video>
     </figure>
+    <p class="credit">
+      In the recording: <i>Big Buck Bunny</i> © Blender Foundation,{" "}
+      <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>; red panda photo by
+      Mathias Appel, public domain.
+    </p>
 
     <div class="peer peer-green" aria-hidden="true">
       <svg viewBox="0 0 16 16">
@@ -71,13 +76,6 @@ import { APP_URL } from "../lib/app.ts";
       <span>Ada</span>
     </div>
     <p class="note note-green">a real recording, not a mockup</p>
-
-    <div class="peer peer-orange" aria-hidden="true">
-      <svg viewBox="0 0 16 16">
-        <path d="M1 1L14 6.5L7.6 8L5.6 14.6Z" />
-      </svg>
-      <span>Sam</span>
-    </div>
   </div>
 </section>
 
@@ -243,6 +241,15 @@ import { APP_URL } from "../lib/app.ts";
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .credit {
+    margin: 10px 0 0;
+    color: var(--ink-soft);
+    font-size: 0.75rem;
+    text-align: right;
+  }
+  .credit a {
+    color: inherit;
+  }
   .screen {
     display: block;
     width: 100%;
@@ -288,18 +295,6 @@ import { APP_URL } from "../lib/app.ts";
   .peer-green span {
     background: var(--peer-green-tag);
   }
-  .peer-orange {
-    right: max(8px, 4%);
-    bottom: 14%;
-    animation-delay: 2.1s;
-  }
-  .peer-orange path {
-    fill: var(--peer-orange);
-  }
-  .peer-orange span {
-    background: var(--peer-orange);
-    color: var(--ink);
-  }
   @keyframes peer-in {
     from {
       opacity: 0;
@@ -334,9 +329,6 @@ import { APP_URL } from "../lib/app.ts";
     }
     .note {
       display: none;
-    }
-    .peer-orange {
-      bottom: 6%;
     }
   }
 </style>
